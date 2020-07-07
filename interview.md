@@ -3,9 +3,9 @@
  * @LastEditors: JNJYan
  * @Email: jjy20140825@gmail.com
  * @Date: 2020-07-07 00:01:08
- * @LastEditTime: 2020-07-07 16:04:10
+ * @LastEditTime: 2020-07-07 17:00:25
  * @Description: Modify here please
- * @FilePath: /readingnote/面试.md
+ * @FilePath: /Interview/interview.md
 --> 
 
 [TOC]
@@ -19,11 +19,16 @@
 ## 概念
 ### 编译
 1. 预处理
+
 展开头文件，宏替换，删除注释、条件编译
+
 2. 编译
+
 检查语法生成汇编，文件后缀为`.s`
+
 3. 汇编
 将汇编转为机器码，文件后缀为`.o`
+
 4. 链接
 链接至一起生成可执行程序
 
