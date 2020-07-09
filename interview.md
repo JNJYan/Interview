@@ -39,6 +39,15 @@
 静态编译：提取库中需要的部分，链接到可执行文件中，会被重复装载，浪费内存，如果有静态库需要更新，则程序需要重新编译。
 动态编译：依赖于外部动态库，在运行时去调用，库更新时，不需要重新编译。
 
+### 堆栈溢出
+1. 栈溢出
+递归调用次数过多导致的，通过尾递归来解决。
+
+2. 堆溢出
+缓冲区溢出，写操作超出缓冲区范围，覆盖了已有数据。
+
+
+
 ## 对比
 ### sizeof/strlen
 `sizeof`：运算符，编译时已经计算好了，返回的是字符数组在内存中占用的空间，包含末尾空字符`\0`，当给定函数时，返回函数返回类型占用空间的大小，给定指针时，返回指针的大小。
@@ -85,6 +94,9 @@
 ![img](https://img-blog.csdn.net/20130913163641750?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvU2t5X3Fpbmc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center)
 只有`long`和指针的大小会因机器位数改变。
 
+
+
+
 # 计算机网络
 ## 网络模型
 ### TCP
@@ -92,6 +104,13 @@
 
 ### OSI
 物理层、数据链路层、网络层、传输层、会话层、表示层、应用层
+
+### 为什么要分层
+1. 各层之间相互独立，高层不需要知道底层功能是如何实现的，只需要调用底层的接口就可以。
+
+2. 内部变化对外部不可见，不会对其他层产生影响。
+
+3. 易于实现和标准化，将复杂的网络通信分解为一系列的功能模块。
 
 ## 传输层协议
 ### TCP/UDP
@@ -447,9 +466,145 @@ TSL(Transport Layer Security) 传输层安全，前身SSL，目前广泛使用TS
 
 
 # 数据库
+## 范式
+1. 第一范式
+强调数据表的原子性，所有的字段不可再分。
+
+2. 第二范式
+第一范式的基础上，消除非主属性对于码的部分函数依赖，即存在主键能够将记录唯一区分。
+
+3. 第三范式
+第二范式的基础上，消除非主属性对主属性的传递依赖，要求表中不能含其他表中已包含的非主关键字信息。
+
+4. BCNF范式
+第三范式基础上，消除主属性对主属性的传递依赖。
+
+## 事务
+### ACID
+- A
+   原子性
+- C
+   一致性，完整性约束
+- I
+   隔离性
+- D
+   持久性
+
+### 隔离级别
+- 脏读
+读未提交级别内的，一个未提交事务的对数据的更改被其他事务看到。
+
+- 不可重复读
+一个事务，多次读同一记录，读出来的内容不一致。
+
+- 幻读
+一个事务对某一条件的记录进行了更改，但存在另一事务插入了一条数据，致使前者在提交之后再去读数据时，发现了新插入的数据，看起来好像没有更改成功，即幻读。
+
 ## NoSQL
 Not Only SQL
 1. K-V存储，解决关系数据库无法存储数据结构的问题，value可以是各种数据结构，缺点不支持完整的ACID，Redis，memecachedb
 2. 文档数据库，解决关系数据库的强schema约束问题，存储的是json，数据字段的灵活性，适合电商筛选列表，不支持事务，无法实现join操作，MongoDB
 3. 列式数据库，解决关系数据库大数据场景下的I/O问题，按照列存储数据，HBase
 4. 全文搜索引擎：解决关系数据的全文搜索性能问题，倒排索引，Elasticsearch
+
+# 设计模式
+## 单例模式
+### 懒汉
+#### 线程安全-双判断+锁
+```c++
+class Singleton{
+private:
+   Singleton(){
+      cout << "constructor called" <<endl;
+   }
+   Singleton(const Singleton&)=delete;
+   Singleton& operator=(const Singelton&)=delete;
+   static mutex mtx;
+   static Singleton* ptr;
+public:
+   ~Singleton(){
+      cout << "destructor called" <<endl;
+   }
+   Singleton* getInstance(){
+      if(ptr == nullptr){
+         lock_guard<mutex> lock(mtx);
+         if(ptr == nullptr){
+            ptr = new Singleton;
+         }
+      }
+      return ptr;
+   }
+};
+Singleton* Singleton::ptr = nullptr;
+```
+#### 线程安全-局部静态变量
+```c++
+class Singleton{
+private:
+   Singleton(){
+      cout << "constructor called" <<endl;
+   }
+   Singleton(const Singleton&)=delete;
+   Singleton& operator=(const Singelton&)=delete;
+public:
+   ~Singleton(){
+      cout << "destructor called" <<endl;
+   }
+   Singleton& getInstance(){
+      static Singleton ptr;
+      return ptr;
+   }
+};
+
+```
+### 饿汉
+```c++
+class Singleton{
+private:
+   Singleton(){
+      cout << "constructor called" <<endl;
+   }
+   Singleton(const Singleton&)=delete;
+   Singleton& operator=(const Singelton&)=delete;
+   static Singleton* ptr;
+public:
+   ~Singleton(){
+      cout << "destructor called" <<endl;
+   }
+   Singleton* getInstance(){
+      return ptr;
+   }
+};
+Singleton* Singleton::ptr = new Singleton();
+```
+
+## 工厂
+### 简单工厂
+### 工厂方法
+### 抽象工厂
+
+
+# 算法
+## rand5生成rand7
+rand5()能生成1到5
+
+首先证明，rand7可以实现rand5
+$$
+p(x=1) = 1/7 + (2/7)*(1/7) + (2/7)^2 * (1/7) + \dots \\
+= (1/7)*(1+ (2/7) + (2/7)^2 + \dots)//等比数列 \\
+= (1/7) * (1/(1-(2/7)))\\
+= 1/5
+$$
+那么我们只要能通过rand5生成一个大于7的随机数生成器即可。
+$$
+rand25() = 5*(rand5()-1) + rand5()
+$$
+```python
+def rand7():
+   res = 25
+   while(res>21):
+      res = 5 * (rand5() - 1) + rand5()
+   return res%7+1
+```
+
+## 输入一个正整数，求和等于这个正整数的全部正整数连续序列
