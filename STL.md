@@ -3,7 +3,7 @@
  * @LastEditors: JNJYan
  * @Email: jjy20140825@gmail.com
  * @Date: 2020-07-10 09:57:30
- * @LastEditTime: 2020-07-12 17:17:00
+ * @LastEditTime: 2020-08-08 09:37:51
  * @Description: Modify here please
  * @FilePath: /Interview/STL.md
 --> 
@@ -114,6 +114,31 @@ ForwardIterator uninitialized_fill_n(ForwardIterator first, Size n, const T& x);
 迭代器模式：提供一种方法，使之能够依序遍历某个容器内的所有元素，而又无需暴露该容器的内部表达方式。
 
 STL的中心思想在于：将数据容器和算法分开，即容器和算法的泛型化。利用模板类和模板函数来实现。
+
+## 迭代器失效
+### vector
+`push_back()`之后，end操作返回的迭代器肯定会失效。
+
+在内存重新分配之后，所有迭代器失效。插入元素若重新分配内存，则所有迭代器失效，若没有重新分配内存则，插入元素之后的所有元素迭代器失效。
+
+删除元素时，被删除元素之后的任何元素的迭代器都将失效。
+
+### deque
+在首部和尾部插入元素不会使任何迭代器失效。
+
+在首部和尾部删除元素，会使指向被删除元素的迭代器失效。
+
+在deque容器的任何其他位置插入和删除操作，会使指向该容器元素的所有迭代器都失效。
+
+### list
+除了删除元素时，指向被删除元素的迭代器失效外，其他迭代器都不会受影响。
+
+### stack/queue/priority_queue
+适配容器，不能遍历。
+
+### set/multiset/map/multimap
+若删除元素，则指向该删除元素的迭代器失效，其他操作均不会失效。
+
 
 # 序列式容器
 vector、string、deque、list
