@@ -1,12 +1,3 @@
-<!--
- * @Author: JNJYan
- * @LastEditors: JNJYan
- * @Email: jjy20140825@gmail.com
- * @Date: 2020-06-17 13:18:39
- * @LastEditTime: 2020-06-17 15:22:52
- * @Description: Modify here please
- * @FilePath: /study/cpp.md
---> 
 # 1. 栈 vs 堆
 
 **栈的特性**：

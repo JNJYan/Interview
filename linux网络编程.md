@@ -1,12 +1,3 @@
-<!--
- * @Author: JNJYan
- * @LastEditors: JNJYan
- * @Email: jjy20140825@gmail.com
- * @Date: 2020-06-26 14:22:27
- * @LastEditTime: 2020-08-04 14:54:08
- * @Description: Modify here please
- * @FilePath: /Interview/linux网络编程.md
---> 
 
 [TOC]
 
@@ -514,6 +505,11 @@ int msgctl(int msgqid, int cmd, struct msqid_ds *buf);
 #### 共享内存
 
 # Socket
+## Send返回0
+1. 内核缓冲区中没有数据。
+2. 对端调用close(fd)关闭连接。
+3. 对端调用close(fd, SHUT_WR)，关闭写连接，半关闭。
+
 ## 套接字类型
 ![image-20200627154017338](C:\Users\May\AppData\Roaming\Typora\typora-user-images\image-20200627154017338.png)
 
@@ -535,6 +531,7 @@ int msgctl(int msgqid, int cmd, struct msqid_ds *buf);
 
 ## 套接字
 ### 
+
 ## I/O模式
 - 阻塞I/O
 - 非阻塞I/O
